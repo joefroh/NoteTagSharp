@@ -45,26 +45,13 @@ namespace NoteTag
 
         private NoteNode ReadTag(StreamReader stream, NoteNode parent)
         {
-            var node = new NoteNode(null, null, parent);
+            var node = GetNodeTagFromStream(stream, parent);
+            return GetNodeContentFromStream(stream, node);
+        }
 
+        private NoteNode GetNodeContentFromStream(StreamReader stream, NoteNode node)
+        {
             var builder = new StringBuilder();
-
-            while (!stream.EndOfStream)
-            {
-                int newChar = stream.Read();
-
-                if (newChar != '>')
-                {
-                    builder.Append((char)newChar);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            node.Tag = builder.ToString();
-            builder.Clear();
 
             while (!stream.EndOfStream)
             {
@@ -93,6 +80,30 @@ namespace NoteTag
                     ReadTag(stream, node);
                 }
             }
+            return node;
+        }
+
+        private static NoteNode GetNodeTagFromStream(StreamReader stream, NoteNode parent)
+        {
+            var node = new NoteNode(null, null, parent);
+
+            var builder = new StringBuilder();
+
+            while (!stream.EndOfStream)
+            {
+                int newChar = stream.Read();
+
+                if (newChar != '>')
+                {
+                    builder.Append((char)newChar);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            node.Tag = builder.ToString();
             return node;
         }
     }
