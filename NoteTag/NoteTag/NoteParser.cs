@@ -1,62 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NoteTag
 {
     public class NoteParser
     {
         /// <summary>
-        /// Contains the contents of the file passed to the constructor to parse without locking the file.
+        ///     Contains the contents of the file passed to the constructor to parse without locking the file.
         /// </summary>
-        private string fileContents;
+        private readonly string fileContents;
 
         public NoteParser(string path)
         {
-            using (StreamReader reader = new StreamReader(path))
+            using (var reader = new StreamReader(path))
             {
                 fileContents = reader.ReadToEnd();
             }
-
         }
 
         /// <summary>
-        /// Parses the file contents.
+        ///     Parses the file contents.
         /// </summary>
-        private void Parse()
+        public NoteNode Parse()
         {
             var stream = new MemoryStream();
-            using (StreamWriter writer = new StreamWriter(stream))
+            NoteNode result = null;
+            using (var writer = new StreamWriter(stream))
             {
+                writer.AutoFlush = true;
                 writer.Write(fileContents);
                 stream.Position = 0;
 
-                using (StreamReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     //advance stream to beginning tag
                     while (reader.Read() != '<') ;
 
-                    ReadTag(stream, null);
+                    result = ReadTag(reader, null);
                 }
             }
+            return result;
         }
 
         private NoteNode ReadTag(StreamReader stream, NoteNode parent)
         {
             var node = new NoteNode(null, null, parent);
 
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
 
             while (!stream.EndOfStream)
             {
-                var newChar = stream.Read();
+                int newChar = stream.Read();
 
-                if (newChar != ">")
+                if (newChar != '>')
                 {
-                    builder.Append(newChar);
+                    builder.Append((char)newChar);
                 }
                 else
                 {
@@ -70,34 +69,31 @@ namespace NoteTag
             while (!stream.EndOfStream)
             {
                 //read the tag until ">" then read in content until end tag "</>" or "<" and recruse
-                var newchar = stream.Read();
+                int newchar = stream.Read();
 
-                if (newchar != "<")
+                if (newchar != '<')
                 {
-                    builder.Append = newchar;
+                    builder.Append((char)newchar);
                 }
                 else
                 {
-                    if (stream.Peek() == "/")
+                    if (stream.Peek() == '/')
                     {
                         stream.Read();
-                        if (stream.Peek() == ">")
+                        if (stream.Peek() == '>')
                         {
                             stream.Read();
                             node.Content = builder.ToString();
                             return node;
                         }
-                        else
-                        {
-                            throw new Exception("Bad Formed tag");
-                        }
+
+                        throw new Exception("Bad Formed tag");
                     }
-                    else
-                    {
-                        ReadTag(stream, node);
-                    }
+
+                    ReadTag(stream, node);
                 }
             }
+            return node;
         }
     }
 }
