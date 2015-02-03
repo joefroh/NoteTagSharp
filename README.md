@@ -1,2 +1,2 @@
 # NoteTagSharp
-Pseudo XML formated note taking utility.
+Pseudo XML formatted note taking utility.
