@@ -52,9 +52,10 @@ namespace NoteTag
         private NoteNode GetNodeContentFromStream(StreamReader stream, NoteNode node)
         {
             var builder = new StringBuilder();
-
+            var count = 0;
             while (!stream.EndOfStream)
             {
+                
                 //read the tag until ">" then read in content until end tag "</>" or "<" and recruse
                 int newchar = stream.Read();
 
@@ -76,7 +77,8 @@ namespace NoteTag
 
                         throw new Exception("Bad Formed tag");
                     }
-
+                    builder.Append("{" + count + "}");
+                    count++;
                     ReadTag(stream, node);
                 }
             }

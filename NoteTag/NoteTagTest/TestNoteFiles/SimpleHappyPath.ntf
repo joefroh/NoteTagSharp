@@ -1,6 +1,6 @@
 ﻿<NoteFile>
 <intro>
-This is a file to test the note parser. I wrote this file in <date>January of 2015</> to test a simple parser.
+This is a file to test the note parser. I wrote this file in <date>January of 2015</> to test a simple <name>parser</>.
 </>
 <context>
 I am just trying to see if nesting and multiple tags work
