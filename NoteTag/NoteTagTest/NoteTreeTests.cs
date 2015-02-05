@@ -63,7 +63,7 @@ namespace NoteTagTest
             var result = tree.GetNotesByTag("testTag");
 
             Assert.AreEqual(result.Count(), 1);
-            Assert.AreEqual(result.ElementAt(0), "content");
+            Assert.AreEqual(result.ElementAt(0), note);
         }
     }
 }

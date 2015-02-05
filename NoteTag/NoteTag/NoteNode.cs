@@ -4,6 +4,7 @@ namespace NoteTag
 {
  
     //TODO: Look into using observables on the tags or contents to allow for search cache updating
+    //TODO: override to string to recursively build the original not string less the tags of the nested nodes
     public class NoteNode
     {
         private string _content;
