@@ -9,27 +9,33 @@ namespace NoteTag
         /// <summary>
         ///     Contains the contents of the file passed to the constructor to parse without locking the file.
         /// </summary>
-        private readonly string fileContents;
+        private readonly string _fileContents;
 
+        /// <summary>
+        /// Initializes a new instance of the NoteParser class. Takes a path to an NTF file and reads its contents
+        /// into a cache for later processing.
+        /// </summary>
+        /// <param name="path"></param>
         public NoteParser(string path)
         {
             using (var reader = new StreamReader(path))
             {
-                fileContents = reader.ReadToEnd();
+                _fileContents = reader.ReadToEnd();
             }
         }
 
         /// <summary>
-        ///     Parses the file contents.
+        ///     Parses the file contents and provides a tree structure of the input file.
         /// </summary>
-        public NoteNode Parse()
+        /// <returns>A <see cref="NoteTree"/> containg the contents of the ntf file.</returns>
+        public NoteTree GetTree()
         {
             var stream = new MemoryStream();
-            NoteNode result = null;
+            NoteNode notes = null;
             using (var writer = new StreamWriter(stream))
             {
                 writer.AutoFlush = true;
-                writer.Write(fileContents);
+                writer.Write(_fileContents);
                 stream.Position = 0;
 
                 using (var reader = new StreamReader(stream))
@@ -37,10 +43,10 @@ namespace NoteTag
                     //advance stream to beginning tag
                     while (reader.Read() != '<') ;
 
-                    result = ReadTag(reader, null);
+                    notes = ReadTag(reader, null);
                 }
             }
-            return result;
+            return new NoteTree(notes);
         }
 
         private NoteNode ReadTag(StreamReader stream, NoteNode parent)

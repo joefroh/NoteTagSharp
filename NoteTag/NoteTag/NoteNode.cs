@@ -2,6 +2,8 @@
 
 namespace NoteTag
 {
+ 
+    //TODO: Look into using observables on the tags or contents to allow for search cache updating
     public class NoteNode
     {
         private string _content;

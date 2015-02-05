@@ -7,10 +7,12 @@ namespace NoteTagTest
     public class ParserTests
     {
         [TestMethod]
-        public void ParserTest()
+        public void HappyParse()
         {
             var parser = new NoteParser("TestNoteFiles/SimpleHappyPath.ntf");
-            var result = parser.Parse();
+            var result = parser.GetTree();
+
+            Assert.IsNotNull(result);
         }
     }
 
