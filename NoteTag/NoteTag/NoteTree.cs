@@ -7,6 +7,10 @@ namespace NoteTag
     {
         private readonly NoteNode _root;
 
+        /// <summary>
+        /// Initializes a NoteTree given a root node.
+        /// </summary>
+        /// <param name="root">The NoteNode rooting the tree.</param>
         public NoteTree(NoteNode root)
         {
             if (null == root)
@@ -17,6 +21,11 @@ namespace NoteTag
             _root = root;
         }
 
+        /// <summary>
+        /// Searches for the existance of a NoteNode with a given tag.
+        /// </summary>
+        /// <param name="tag">The tag of interest.</param>
+        /// <returns>True if a tag is on any of the NoteNodes in the tree.</returns>
         public bool SearchTag(string tag)
         {
             return RecurseSearchTag(_root, tag);
@@ -40,6 +49,11 @@ namespace NoteTag
             return false;
         }
 
+        /// <summary>
+        /// Provides a list of all found Notes with the given tag.
+        /// </summary>
+        /// <param name="tag">The tag of interest.</param>
+        /// <returns>A list containing all the NoteNodes or an empty list.</returns>
         public IEnumerable<NoteNode> GetNotesByTag(string tag)
         {
             return RecurseGetNotesByTag(new List<NoteNode>(), _root);
@@ -60,6 +74,10 @@ namespace NoteTag
             return list;
         }
 
+        /// <summary>
+        /// Gets the list of all tags found in the NoteTree.
+        /// </summary>
+        /// <returns>The list of all tags in the tree.</returns>
         public IEnumerable<string> GetTags()
         {
             var list = new List<string>();
