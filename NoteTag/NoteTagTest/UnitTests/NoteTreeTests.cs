@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoteTag;
 
-namespace NoteTagTest
+namespace NoteTagTest.UnitTests
 {
     [TestClass]
     public class NoteTreeTests
@@ -48,7 +48,7 @@ namespace NoteTagTest
         {
             var note = new NoteNode("testTag", "content");
             var tree = new NoteTree(note);
-            var list = tree.GetTags();
+            IEnumerable<string> list = tree.GetTags();
 
             Assert.AreEqual(list.Count(), 1);
             Assert.AreEqual(list.ElementAt(0), "testTag");
@@ -60,7 +60,7 @@ namespace NoteTagTest
             var note = new NoteNode("testTag", "content");
             var tree = new NoteTree(note);
 
-            var result = tree.GetNotesByTag("testTag");
+            IEnumerable<NoteNode> result = tree.GetNotesByTag("testTag");
 
             Assert.AreEqual(result.Count(), 1);
             Assert.AreEqual(result.ElementAt(0), note);

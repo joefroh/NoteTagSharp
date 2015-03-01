@@ -11,6 +11,9 @@ namespace NoteTag
         /// </summary>
         private readonly string _fileContents;
 
+        private const string header = "<NoteFile>";
+        private const string endTag = @"</>";
+
         /// <summary>
         /// Initializes a new instance of the NoteParser class. Takes a path to an NTF file and reads its contents
         /// into a cache for later processing.
@@ -21,6 +24,15 @@ namespace NoteTag
             using (var reader = new StreamReader(path))
             {
                 _fileContents = reader.ReadToEnd();
+            }
+
+            if (!_fileContents.StartsWith(header))
+            {
+                var builder = new StringBuilder();
+                builder.Append(header);
+                builder.Append(_fileContents);
+                builder.Append(endTag);
+                _fileContents = builder.ToString();
             }
         }
 

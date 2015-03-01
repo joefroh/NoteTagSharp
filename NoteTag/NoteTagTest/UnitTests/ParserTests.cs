@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoteTag;
 
-namespace NoteTagTest
+namespace NoteTagTest.UnitTests
 {
     [TestClass]
     public class ParserTests
