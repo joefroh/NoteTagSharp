@@ -14,6 +14,8 @@ namespace NoteTag
         private const string header = "<NoteFile>";
         private const string endTag = @"</>";
 
+        //TODO: Fix inclusion of format header
+
         /// <summary>
         /// Initializes a new instance of the NoteParser class. Takes a path to an NTF file and reads its contents
         /// into a cache for later processing.
