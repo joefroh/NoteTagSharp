@@ -9,7 +9,7 @@ namespace NoteTag
         /// <summary>
         ///     Contains the contents of the file passed to the constructor to parse without locking the file.
         /// </summary>
-        private readonly string _fileContents;
+        private readonly string _noteContents;
 
         private const string header = "<NoteFile>";
         private const string endTag = @"</>";
@@ -18,21 +18,29 @@ namespace NoteTag
         /// Initializes a new instance of the NoteParser class. Takes a path to an NTF file and reads its contents
         /// into a cache for later processing.
         /// </summary>
-        /// <param name="path"></param>
-        public NoteParser(string path)
+        /// <param name="input"></param>
+        /// <param name="isPath"></param>
+        public NoteParser(string input, bool isPath)
         {
-            using (var reader = new StreamReader(path))
+            if (isPath)
             {
-                _fileContents = reader.ReadToEnd();
-            }
+                using (var reader = new StreamReader(input))
+                {
+                    _noteContents = reader.ReadToEnd();
+                }
 
-            if (!_fileContents.StartsWith(header))
+                if (!_noteContents.StartsWith(header))
+                {
+                    var builder = new StringBuilder();
+                    builder.Append(header);
+                    builder.Append(_noteContents);
+                    builder.Append(endTag);
+                    _noteContents = builder.ToString();
+                }
+            }
+            else
             {
-                var builder = new StringBuilder();
-                builder.Append(header);
-                builder.Append(_fileContents);
-                builder.Append(endTag);
-                _fileContents = builder.ToString();
+                _noteContents = input;
             }
         }
 
@@ -47,7 +55,7 @@ namespace NoteTag
             using (var writer = new StreamWriter(stream))
             {
                 writer.AutoFlush = true;
-                writer.Write(_fileContents);
+                writer.Write(_noteContents);
                 stream.Position = 0;
 
                 using (var reader = new StreamReader(stream))
