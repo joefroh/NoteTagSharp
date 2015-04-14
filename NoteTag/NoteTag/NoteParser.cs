@@ -6,50 +6,52 @@ namespace NoteTag
 {
     public class NoteParser
     {
+        private const string header = "<NoteFile>";
+        private const string endTag = @"</>";
+
         /// <summary>
         ///     Contains the contents of the file passed to the constructor to parse without locking the file.
         /// </summary>
         private readonly string _noteContents;
 
-        private const string header = "<NoteFile>";
-        private const string endTag = @"</>";
-
         //TODO: Fix inclusion of format header
 
         /// <summary>
-        /// Initializes a new instance of the NoteParser class. Takes a path to an NTF file and reads its contents
-        /// into a cache for later processing.
+        ///     Takes a string representing the contents of a note file and puts it into a cache for later processing.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="isPath"></param>
-        public NoteParser(string input, bool isPath)
+        public NoteParser(string input)
         {
-            if (isPath)
-            {
-                using (var reader = new StreamReader(input))
-                {
-                    _noteContents = reader.ReadToEnd();
-                }
+            _noteContents = input;
+        }
 
-                if (!_noteContents.StartsWith(header))
-                {
-                    var builder = new StringBuilder();
-                    builder.Append(header);
-                    builder.Append(_noteContents);
-                    builder.Append(endTag);
-                    _noteContents = builder.ToString();
-                }
-            }
-            else
+        /// <summary>
+        ///     Initializes a new instance of the NoteParser class. Takes a path to an NTF file and reads its contents
+        ///     into a cache for later processing.
+        /// </summary>
+        /// <param name="file"></param>
+        public NoteParser(FileInfo file)
+        {
+            using (var reader = new StreamReader(file.FullName))
             {
-                _noteContents = input;
+                _noteContents = reader.ReadToEnd();
+            }
+
+            if (!_noteContents.StartsWith(header))
+            {
+                var builder = new StringBuilder();
+                builder.Append(header);
+                builder.Append(_noteContents);
+                builder.Append(endTag);
+                _noteContents = builder.ToString();
             }
         }
 
         /// <summary>
         ///     Parses the file contents and provides a tree structure of the input file.
         /// </summary>
-        /// <returns>A <see cref="NoteTree"/> containg the contents of the ntf file.</returns>
+        /// <returns>A <see cref="NoteTree" /> containg the contents of the ntf file.</returns>
         public NoteTree GetTree()
         {
             var stream = new MemoryStream();
@@ -63,7 +65,7 @@ namespace NoteTag
                 using (var reader = new StreamReader(stream))
                 {
                     //advance stream to beginning tag
-                    while (reader.Read() != '<') ;
+                    while (reader.Read() != '<' && !reader.EndOfStream) ;
 
                     notes = ReadTag(reader, null);
                 }
@@ -83,13 +85,12 @@ namespace NoteTag
             var count = 0;
             while (!stream.EndOfStream)
             {
-                
                 //read the tag until ">" then read in content until end tag "</>" or "<" and recruse
-                int newchar = stream.Read();
+                var newchar = stream.Read();
 
                 if (newchar != '<')
                 {
-                    builder.Append((char)newchar);
+                    builder.Append((char) newchar);
                 }
                 else
                 {
@@ -121,11 +122,11 @@ namespace NoteTag
 
             while (!stream.EndOfStream)
             {
-                int newChar = stream.Read();
+                var newChar = stream.Read();
 
                 if (newChar != '>')
                 {
-                    builder.Append((char)newChar);
+                    builder.Append((char) newChar);
                 }
                 else
                 {

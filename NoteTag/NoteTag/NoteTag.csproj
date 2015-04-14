@@ -47,7 +47,6 @@
     <Compile Include="NoteNode.cs" />
     <Compile Include="NoteParser.cs" />
     <Compile Include="NoteTree.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
