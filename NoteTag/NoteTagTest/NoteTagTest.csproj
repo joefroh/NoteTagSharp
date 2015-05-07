@@ -62,6 +62,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="TestNoteFiles\BareString.ntf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestNoteFiles\MissingCloseTag.ntf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

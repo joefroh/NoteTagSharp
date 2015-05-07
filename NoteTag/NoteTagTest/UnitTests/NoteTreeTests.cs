@@ -11,6 +11,7 @@ namespace NoteTagTest.UnitTests
     public class NoteTreeTests
     {
         private const string PATH = "TestNoteFiles/SimpleHappyPath.ntf";
+        private const string BAREPATH = "TestNoteFiles/BareString.ntf";
 
         [TestMethod]
         public void ConstructorWithNullTest()
@@ -93,6 +94,25 @@ namespace NoteTagTest.UnitTests
             var result = tree2.ToString();
 
             Assert.AreEqual(output, result);
+        }
+
+        [TestMethod]
+        public void BareString()
+        {
+            var note = new NoteNode("test", "test");
+            var result = note.ToBareString();
+            Assert.AreEqual("test", result);
+        }
+
+        [TestMethod]
+        public void BareStringTree()
+        {
+            const string expected = "This is a test of the BareString method to see if it works";
+            var parser = new NoteParser(new FileInfo(BAREPATH));
+            var tree = parser.GetTree();
+            var result = tree.ToBareString();
+
+            Assert.AreEqual(expected, result);
         }
     }
 }

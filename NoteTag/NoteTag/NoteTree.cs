@@ -102,11 +102,13 @@ namespace NoteTag
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            //builder.Append("<NoteFile>");
-            //builder.AppendLine();
             builder.Append(_root.ToString());
-            // builder.Append("</>");
             return builder.ToString();
+        }
+
+        public string ToBareString()
+        {
+            return _root.ToBareString();
         }
     }
 }

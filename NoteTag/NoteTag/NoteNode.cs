@@ -6,7 +6,6 @@ namespace NoteTag
 {
 
     //TODO: Look into using observables on the tags or contents to allow for search cache updating
-    //TODO: Create a string method that creates the note file without any of the markup
     public class NoteNode
     {
         private string _content;
@@ -36,7 +35,7 @@ namespace NoteTag
             {
                 if (value != null)
                 {
-                    _content = value.Trim();
+                    _content = value.Replace("\r\n",""); //trim here removed logical spaces so i did a replace for line feeds instead
                 }
             }
         }
@@ -51,6 +50,13 @@ namespace NoteTag
             builder.AppendLine();
             builder.Append("</>");
             
+            return builder.ToString();
+        }
+
+        public string ToBareString()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat(Content, Children.Select((c) => c.ToBareString()).ToArray());
             return builder.ToString();
         }
 
