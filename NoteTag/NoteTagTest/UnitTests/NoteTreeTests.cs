@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoteTag;
@@ -64,6 +65,34 @@ namespace NoteTagTest.UnitTests
 
             Assert.AreEqual(result.Count(), 1);
             Assert.AreEqual(result.ElementAt(0), note);
+        }
+
+        [TestMethod]
+        public void NotesToString()
+        {
+            var note = new NoteNode("test", "test");
+            var tree = new NoteTree(note);
+            var output = tree.ToString();
+
+            var parser = new NoteParser(output);
+            var tree2 = parser.GetTree();
+            var output2 = tree2.ToString();
+
+            Assert.AreEqual(output, output2);
+        }
+
+        [TestMethod]
+        public void RealTreeToString()
+        {
+            var parser = new NoteParser(new FileInfo(PATH));
+            var tree = parser.GetTree();
+            var output = tree.ToString();
+
+            var parser2 = new NoteParser(output);
+            var tree2 = parser2.GetTree();
+            var result = tree2.ToString();
+
+            Assert.AreEqual(output, result);
         }
     }
 }

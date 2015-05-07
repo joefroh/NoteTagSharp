@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace NoteTag
 {
@@ -96,6 +97,16 @@ namespace NoteTag
                 RecurseGetTags(list, noteNode);
             }
             return list;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            //builder.Append("<NoteFile>");
+            //builder.AppendLine();
+            builder.Append(_root.ToString());
+            // builder.Append("</>");
+            return builder.ToString();
         }
     }
 }
