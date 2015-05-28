@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>dcda31f4-9079-4176-9b0b-85c940426d91</ProjectGuid>
+    <ProjectGuid>{3DFEB985-D0ED-4A72-99FE-7B9913A32B8A}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NoteTagApp</RootNamespace>
