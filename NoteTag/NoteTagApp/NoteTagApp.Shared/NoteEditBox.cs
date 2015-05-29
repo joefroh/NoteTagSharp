@@ -20,7 +20,6 @@ namespace NoteTagApp
             this.AcceptsReturn = true;
 
             TextChanged += OnTextEntryChanged;
-
         }
 
         protected override void OnKeyUp(KeyRoutedEventArgs e)
@@ -28,15 +27,31 @@ namespace NoteTagApp
 
             if (e.Key == VirtualKey.Enter && (_inTagMode || _enteringTagMode))
             {
-                MoveCurserToEndTag();
-                _inTagMode = false;
-                _enteringTagMode = false;
+                if (_enteringTagMode)
+                {
+                    MoveCurserToEndTag();
+                    InsertEndTag();
+                    _inTagMode = true;
+                    _enteringTagMode = false;
+                }
+                else if (_inTagMode)
+                {
+                    _inTagMode = false;
+                    MoveCurserToEndTag();
+                }
+                
             }
             else
             {
-
                 base.OnKeyUp(e);
             }
+        }
+
+        private void InsertEndTag()
+        {
+            var start = this.SelectionStart;
+            this.Text = this.Text.Insert(this.SelectionStart, "</>");
+            this.SelectionStart = start;
         }
 
         protected override void OnKeyDown(KeyRoutedEventArgs e)
