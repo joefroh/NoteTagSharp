@@ -33,29 +33,30 @@ namespace NoteTagApp
 
         private void OnTextEntryChanged(object sender, RoutedEventArgs e)
         {
-            var textBox = (RichEditBox)sender;
+            var textBox = (TextBox)sender;
+            
             string data = "";
-            textBox.Document.GetText(new TextGetOptions(), out data);
+            data = textBox.Text;
             if (data.Trim().Any())
             {
-                switch (data.Trim().Last())
+                if (!enteringTag && data[textBox.SelectionStart - 1] == '>')
                 {
-                    case '<':
-                        enteringTag = true;
-                        break;
-                    case '>':
-                        var chunks = data.Trim().Split();
-                        tagText = chunks.Last().Replace("<", "").Replace(">", "");
-                        if (enteringTag)
-                        {
-                            enteringTag = false;
-                            var result = data.Trim() + "</>";
-                            textBox.Document.SetText(new TextSetOptions(), result);
-                        }
-                        break;
+                    enteringTag = true;
+                    var start = textBox.SelectionStart;
+                    var length = textBox.SelectionLength;
+
+                    textBox.Text = data.Insert(textBox.SelectionStart, "</>");
+                    textBox.SelectionStart = start;
+                    textBox.SelectionLength = length;
+
+                }
+                else
+                {
+                    enteringTag = false;
                 }
 
             }
+           
         }
     }
 }

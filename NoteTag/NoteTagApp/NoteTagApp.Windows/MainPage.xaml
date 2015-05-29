@@ -9,6 +9,6 @@
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBlock x:Name="TitleBlock" Text="NoteTag" FontSize="40"></TextBlock>
-        <RichEditBox x:Name="MainDataEntry" TextChanged="OnTextEntryChanged" Height="530" VerticalAlignment="Stretch" IsSpellCheckEnabled="True"></RichEditBox>
+        <TextBox x:Name="MainDataEntry" TextChanged="OnTextEntryChanged" Height="530" VerticalAlignment="Stretch" IsSpellCheckEnabled="True"></TextBox>
     </StackPanel>
 </Page>
