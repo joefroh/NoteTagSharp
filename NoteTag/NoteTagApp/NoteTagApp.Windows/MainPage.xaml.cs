@@ -31,32 +31,6 @@ namespace NoteTagApp
             this.InitializeComponent();
         }
 
-        private void OnTextEntryChanged(object sender, RoutedEventArgs e)
-        {
-            var textBox = (TextBox)sender;
-            
-            string data = "";
-            data = textBox.Text;
-            if (data.Trim().Any())
-            {
-                if (!enteringTag && data[textBox.SelectionStart - 1] == '>')
-                {
-                    enteringTag = true;
-                    var start = textBox.SelectionStart;
-                    var length = textBox.SelectionLength;
-
-                    textBox.Text = data.Insert(textBox.SelectionStart, "</>");
-                    textBox.SelectionStart = start;
-                    textBox.SelectionLength = length;
-
-                }
-                else
-                {
-                    enteringTag = false;
-                }
-
-            }
-           
-        }
+       
     }
 }
