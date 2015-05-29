@@ -8,8 +8,9 @@ namespace NoteTagApp
 {
     public class NoteEditBox : TextBox
     {
-        private bool _enteringTag;
-        private bool _inTag;
+        private bool _enteringTagMode;
+        private bool _inTagMode;
+        private bool _skipEvent;
 
         /// <summary>
         /// Constructor. Rigs up all the event handlers as that are done internally as well for cleanliness.
@@ -19,15 +20,16 @@ namespace NoteTagApp
             this.AcceptsReturn = true;
 
             TextChanged += OnTextEntryChanged;
+
         }
 
         protected override void OnKeyUp(KeyRoutedEventArgs e)
         {
 
-            if (e.Key == VirtualKey.Enter && _inTag)
+            if (e.Key == VirtualKey.Enter && _inTagMode)
             {
                 MoveCurserToEndTag();
-                _inTag = false;
+                _inTagMode = false;
 
             }
             else
@@ -39,7 +41,7 @@ namespace NoteTagApp
 
         protected override void OnKeyDown(KeyRoutedEventArgs e)
         {
-            if (e.Key == VirtualKey.Enter && _inTag)
+            if (e.Key == VirtualKey.Enter && _inTagMode)
             {
 
             }
@@ -74,24 +76,15 @@ namespace NoteTagApp
 
             var data = "";
             data = textBox.Text;
-            if (data.Trim().Any())
+            if (!_skipEvent && data.Trim().Any())
             {
-                if (!_enteringTag && data[textBox.SelectionStart - 1] == '>')
+                if (data[textBox.SelectionStart - 1] == '<')
                 {
-                    _enteringTag = true;
+                    _enteringTagMode = true;
+                    _skipEvent = true;
                     var start = textBox.SelectionStart;
-                    var length = textBox.SelectionLength;
-
-                    textBox.Text = data.Insert(textBox.SelectionStart, "</>");
+                    textBox.Text = textBox.Text.Insert(textBox.SelectionStart, ">");
                     textBox.SelectionStart = start;
-                    textBox.SelectionLength = length;
-                    _inTag = true;
-                }
-                else
-                {
-                    //This fixes an issue where the end tag was being continually added due to the addition of it
-                    //also triggeringthe event.
-                    _enteringTag = false;
                 }
             }
         }
