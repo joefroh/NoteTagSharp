@@ -26,11 +26,11 @@ namespace NoteTagApp
         protected override void OnKeyUp(KeyRoutedEventArgs e)
         {
 
-            if (e.Key == VirtualKey.Enter && _inTagMode)
+            if (e.Key == VirtualKey.Enter && (_inTagMode || _enteringTagMode))
             {
                 MoveCurserToEndTag();
                 _inTagMode = false;
-
+                _enteringTagMode = false;
             }
             else
             {
@@ -41,7 +41,7 @@ namespace NoteTagApp
 
         protected override void OnKeyDown(KeyRoutedEventArgs e)
         {
-            if (e.Key == VirtualKey.Enter && _inTagMode)
+            if (e.Key == VirtualKey.Enter && (_inTagMode || _enteringTagMode))
             {
 
             }
@@ -55,7 +55,7 @@ namespace NoteTagApp
         {
             var cursor = this.SelectionStart;
 
-            while (this.Text.Substring(cursor - 3, 3) != "</>")
+            while (this.Text.Substring(cursor - 1, 1) != ">")
             {
                 cursor++;
             }
