@@ -1,12 +1,14 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using Windows.System;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
 namespace NoteTagApp
 {
-    public class NoteEditBox : TextBox
+    public class NoteEditBox : RichEditBox
     {
         private bool _enteringTagMode;
         private bool _inTagMode;
@@ -30,16 +32,16 @@ namespace NoteTagApp
                 if (_enteringTagMode)
                 {
                     MoveCurserToEndTag();
-                    InsertEndTag();
                     _inTagMode = true;
                     _enteringTagMode = false;
                 }
                 else if (_inTagMode)
                 {
                     _inTagMode = false;
+                    _enteringTagMode = false;
                     MoveCurserToEndTag();
                 }
-                
+
             }
             else
             {
@@ -47,36 +49,33 @@ namespace NoteTagApp
             }
         }
 
-        private void InsertEndTag()
-        {
-            var start = this.SelectionStart;
-            this.Text = this.Text.Insert(this.SelectionStart, "</>");
-            this.SelectionStart = start;
-        }
 
         protected override void OnKeyDown(KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter && (_inTagMode || _enteringTagMode))
             {
-
             }
             else
             {
+
                 base.OnKeyDown(e);
             }
         }
 
         private void MoveCurserToEndTag()
         {
-            var cursor = this.SelectionStart;
+            var cursor = this.Document.Selection.StartPosition + 1;
+            string text = "";
+            this.Document.GetText(TextGetOptions.None, out text);
+            
 
-            while (this.Text.Substring(cursor - 1, 1) != ">")
+            while (text.Substring(cursor - 1, 1) != ">")
             {
                 cursor++;
             }
 
-            this.SelectionStart = cursor;
-            this.SelectionLength = 0;
+            this.Document.Selection.StartPosition = cursor;
+            this.Document.Selection.EndPosition = cursor;
         }
 
         //TODO: Fix the tag completion logic, its shit right now
@@ -87,20 +86,28 @@ namespace NoteTagApp
         /// <param name="e"></param>
         private void OnTextEntryChanged(object sender, RoutedEventArgs e)
         {
-            var textBox = (TextBox)sender;
+            var textBox = (RichEditBox)sender;
 
             var data = "";
-            data = textBox.Text;
+            this.Document.GetText(TextGetOptions.None, out data);
             if (!_skipEvent && data.Trim().Any())
             {
-                if (data[textBox.SelectionStart - 1] == '<')
+                //Debug.WriteLine(data[textBox.SelectionStart - 1]);
+                if (data[textBox.Document.Selection.StartPosition - 1] == '<')
                 {
                     _enteringTagMode = true;
+                    _inTagMode = false;
                     _skipEvent = true;
-                    var start = textBox.SelectionStart;
-                    textBox.Text = textBox.Text.Insert(textBox.SelectionStart, ">");
-                    textBox.SelectionStart = start;
+                    var start = textBox.Document.Selection.StartPosition;
+                    data = data.Insert(textBox.Document.Selection.StartPosition, "></>");
+                    textBox.Document.SetText(TextSetOptions.None, data);
+                    textBox.Document.Selection.StartPosition = start;
+                    textBox.Document.Selection.EndPosition = start;
                 }
+            }
+            else
+            {
+                _skipEvent = false;
             }
         }
     }
