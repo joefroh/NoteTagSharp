@@ -7,8 +7,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock x:Name="TitleBlock" Text="NoteTag" FontSize="40"></TextBlock>
-        <local:NoteEditBox x:Name="MainDataEntry" Height="530" VerticalAlignment="Stretch" IsSpellCheckEnabled="True"></local:NoteEditBox>
-    </StackPanel>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" x:Name="SideBarPanel">
+                <TextBlock x:Name="TitleBlock" Text="NoteTag" FontSize="40"></TextBlock>
+        </StackPanel>
+       
+        <local:NoteEditBox Grid.Column="1" x:Name="MainDataEntry" IsSpellCheckEnabled="True" Margin="10,0,0,0"  />
+    </Grid>
 </Page>
