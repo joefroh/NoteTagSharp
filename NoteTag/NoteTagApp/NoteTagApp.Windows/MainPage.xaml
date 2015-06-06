@@ -6,8 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.BottomAppBar>
+        <CommandBar  IsOpen="True" IsSticky="True">
+            <AppBarButton Label="Test" Icon="Edit" />
+        </CommandBar>
+    </Page.BottomAppBar>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
@@ -19,4 +24,5 @@
 
         <local:NoteEditBox Grid.Column="1" x:Name="MainDataEntry" IsSpellCheckEnabled="True" Margin="10,0,0,0"  />
     </Grid>
+
 </Page>
