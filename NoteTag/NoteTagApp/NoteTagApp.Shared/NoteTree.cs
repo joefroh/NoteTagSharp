@@ -79,17 +79,21 @@ namespace NoteTag
         /// Gets the list of all tags found in the NoteTree.
         /// </summary>
         /// <returns>The list of all tags in the tree.</returns>
-        public IEnumerable<string> GetTags()
+        public Dictionary<string, int> GetTags()
         {
-            var list = new List<string>();
+            var list = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             return RecurseGetTags(list, _root);
         }
 
-        private IEnumerable<string> RecurseGetTags(List<string> list, NoteNode node)
+        private Dictionary<string, int> RecurseGetTags(Dictionary<string, int> list, NoteNode node)
         {
-            if (!list.Contains(node.Tag))
+            if (!list.ContainsKey(node.Tag))
             {
-                list.Add(node.Tag);
+                list.Add(node.Tag, 1);
+            }
+            else
+            {
+                list[node.Tag]++;
             }
 
             foreach (var noteNode in node.Children)

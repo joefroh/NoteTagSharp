@@ -17,9 +17,9 @@ namespace NoteTagApp
         private bool _inTagMode;
         private bool _skipEvent;
 
-        public IEnumerable<string> Tags;
+        public Dictionary<string, int> Tags;
 
-        public delegate void TagChangeHandler(IEnumerable<string> tags);
+        public delegate void TagChangeHandler(Dictionary<string, int> tags);
 
         public event TagChangeHandler TagsUpdated;
 

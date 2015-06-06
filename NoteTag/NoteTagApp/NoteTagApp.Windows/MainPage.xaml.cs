@@ -33,16 +33,16 @@ namespace NoteTagApp
             this.MainDataEntry.TagsUpdated += UpdateTagList;
         }
 
-        private void UpdateTagList(IEnumerable<string> tags)
+        private void UpdateTagList(Dictionary<string, int> tags)
         {
             var builder = new StringBuilder();
             foreach (var tag in tags)
             {
-                if (tag.Equals("NoteTag"))
+                if (tag.Key.Equals("NoteTag"))
                 {
                     continue;
                 }
-                builder.AppendLine(tag);
+                builder.AppendLine(String.Format("{0}: {1}", tag.Key, tag.Value));
             }
             this.TagListBlock.Text = builder.ToString();
         }
