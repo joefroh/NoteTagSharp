@@ -16,5 +16,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)NoteEditBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NoteNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NoteParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NoteTree.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIDataModel.cs" />
   </ItemGroup>
 </Project>

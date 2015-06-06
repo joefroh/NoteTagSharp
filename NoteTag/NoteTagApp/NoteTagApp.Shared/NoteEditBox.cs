@@ -1,10 +1,13 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.System;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using NoteTag;
 
 namespace NoteTagApp
 {
@@ -13,6 +16,12 @@ namespace NoteTagApp
         private bool _enteringTagMode;
         private bool _inTagMode;
         private bool _skipEvent;
+
+        public IEnumerable<string> Tags;
+
+        public delegate void TagChangeHandler(IEnumerable<string> tags);
+
+        public event TagChangeHandler TagsUpdated;
 
         /// <summary>
         /// Constructor. Rigs up all the event handlers as that are done internally as well for cleanliness.
@@ -67,7 +76,7 @@ namespace NoteTagApp
             var cursor = this.Document.Selection.StartPosition + 1;
             string text = "";
             this.Document.GetText(TextGetOptions.None, out text);
-            
+
 
             while (text.Substring(cursor - 1, 1) != ">")
             {
@@ -108,6 +117,18 @@ namespace NoteTagApp
             else
             {
                 _skipEvent = false;
+            }
+
+            try
+            {
+                NoteParser parser = new NoteParser("<NoteTag>" + data + "</>");
+                var tree = parser.GetTree();
+                Tags = tree.GetTags();
+                TagsUpdated(Tags);
+            }
+            catch (BadFormedTagFileException ex)
+            {
+                
             }
         }
     }

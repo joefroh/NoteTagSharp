@@ -13,9 +13,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" x:Name="SideBarPanel">
-                <TextBlock x:Name="TitleBlock" Text="NoteTag" FontSize="40"></TextBlock>
+            <TextBlock x:Name="TitleBlock" Text="NoteTag" FontSize="40"/>
+            <TextBlock x:Name="TagListBlock" FontSize="35"/>
         </StackPanel>
-       
+
         <local:NoteEditBox Grid.Column="1" x:Name="MainDataEntry" IsSpellCheckEnabled="True" Margin="10,0,0,0"  />
     </Grid>
 </Page>

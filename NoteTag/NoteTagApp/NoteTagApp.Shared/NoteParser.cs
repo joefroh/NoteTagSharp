@@ -29,22 +29,23 @@ namespace NoteTag
         ///     into a cache for later processing.
         /// </summary>
         /// <param name="file"></param>
-        public NoteParser(FileInfo file)
-        {
-            using (var reader = new StreamReader(file.FullName))
-            {
-                _noteContents = reader.ReadToEnd();
-            }
+        /*   public NoteParser(FileInfo file)
+           {
+               using (var reader = new StreamReader(file.FullName))
+               {
+                   _noteContents = reader.ReadToEnd();
+               }
 
-            if (!_noteContents.StartsWith(header))
-            {
-                var builder = new StringBuilder();
-                builder.Append(header);
-                builder.Append(_noteContents);
-                builder.Append(endTag);
-                _noteContents = builder.ToString();
-            }
-        }
+               if (!_noteContents.StartsWith(header))
+               {
+                   var builder = new StringBuilder();
+                   builder.Append(header);
+                   builder.Append(_noteContents);
+                   builder.Append(endTag);
+                   _noteContents = builder.ToString();
+               }
+           }
+         * */
 
         /// <summary>
         ///     Parses the file contents and provides a tree structure of the input file.
@@ -102,7 +103,7 @@ namespace NoteTag
                             return node;
                         }
 
-                        throw new Exception("Bad Formed tag");
+                        throw new BadFormedTagFileException("Bad Formed tag");
                     }
                     builder.Append("{" + count + "}");
                     count++;
@@ -134,6 +135,16 @@ namespace NoteTag
 
             node.Tag = builder.ToString();
             return node;
+        }
+    }
+
+    //TODO provide the location of the error so we can boil it up to the UI for the user to fix
+    public class BadFormedTagFileException : Exception
+    {
+        public BadFormedTagFileException(string msg)
+            : base(msg)
+        {
+
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -29,8 +30,21 @@ namespace NoteTagApp
         public MainPage()
         {
             this.InitializeComponent();
+            this.MainDataEntry.TagsUpdated += UpdateTagList;
         }
 
-       
+        private void UpdateTagList(IEnumerable<string> tags)
+        {
+            var builder = new StringBuilder();
+            foreach (var tag in tags)
+            {
+                if (tag.Equals("NoteTag"))
+                {
+                    continue;
+                }
+                builder.AppendLine(tag);
+            }
+            this.TagListBlock.Text = builder.ToString();
+        }
     }
 }
